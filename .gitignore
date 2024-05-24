@@ -1,0 +1,7 @@
+/.idea
+.idea
+/config/conf.yaml
+/tmp
+.air.config
+/runtime/cache
+/tests/runtime

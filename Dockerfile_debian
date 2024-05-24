@@ -1,0 +1,30 @@
+FROM debian:buster-slim
+
+RUN apt-get update && \
+    apt-get install -y \
+    git \
+    curl \
+    wget \
+    chromium \
+    freetype2-demos \
+    libharfbuzz-bin \
+    libstdc++6 \
+    libnss3 \
+    fonts-freefont-ttf \
+    xfonts-utils \
+    fontconfig && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN cd /usr/share/fonts/truetype && \
+    git clone --progress --verbose https://github.com/lampnick/free-fonts.git && \
+    mv free-fonts/* ./ && \
+    mkfontscale && \
+    mkfontdir && \
+    fc-cache && \
+    fc-list :lang=zh
+
+RUN chromium --version
+RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64
+RUN chmod +x /usr/local/bin/dumb-init
+# auto run chrome headless
+#ENTRYPOINT ["chromium", "--headless", "--no-first-run", "--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage", "--disable-setuid-sandbox", "--fast-start", "--single-process", "--disable-renderer-backgrounding", "--disable-sync", "--enable-automation", "--hide-scrollbars", "--mute-audio"]
